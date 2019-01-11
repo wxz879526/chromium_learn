@@ -3,7 +3,9 @@
 
 #include "stdafx.h"
 #include "Demo.h"
-#include "base/version.h"
+#include "base/files/file_path.h"
+#include "base/path_service.h"
+#include "base/command_line.h"
 
 #define MAX_LOADSTRING 100
 
@@ -18,11 +20,20 @@ BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
+// ≈‰÷√»’÷æ
 void InitializeLogSetting()
 {
-	base::Version ver("1.0.0");
-	bool b = ver.IsValid();
-	b = !b;
+	base::FilePath exe;
+	base::PathService::Get(base::FILE_EXE, &exe);
+	base::FilePath log_fileName = exe.ReplaceExtension(FILE_PATH_LITERAL("log"));
+	logging::LoggingSettings settings;
+	settings.logging_dest = logging::LOG_TO_ALL;
+	settings.log_file = log_fileName.value().c_str();
+	settings.delete_old = logging::DELETE_OLD_LOG_FILE;
+	logging::InitLogging(settings);
+	logging::SetLogItems(true, true, true, true);
+
+	LOG(INFO) << "InitializeLogSetting finish";
 }
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -34,9 +45,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(lpCmdLine);
 
     // TODO: Place code here.
+	base::CommandLine::Init(0, nullptr);
+
 	InitializeLogSetting();
 
     // Initialize global strings
+	LOG(INFO) << "start to create ui";
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
     LoadStringW(hInstance, IDC_DEMO, szWindowClass, MAX_LOADSTRING);
     MyRegisterClass(hInstance);
