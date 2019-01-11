@@ -45,6 +45,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(lpCmdLine);
 
     // TODO: Place code here.
+	// 必须初始化CommandLine 否则在初始化日志的时候会崩溃
 	base::CommandLine::Init(0, nullptr);
 
 	InitializeLogSetting();
