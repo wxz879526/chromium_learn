@@ -1,0 +1,14 @@
+static_library("hello") {
+    sources = [
+        "hello.cc",
+    ]
+    all_dependent_configs = [
+        ":hello_config",
+    ]
+}
+
+config("hello_config") {
+    defines = [
+        "TWO_PEOPLE",
+    ]
+}

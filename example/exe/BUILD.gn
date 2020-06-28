@@ -1,0 +1,67 @@
+import("//testing/test.gni")
+
+executable("main") {
+    sources = [
+        "main.cc",
+        "IPCMessage.h",
+    ]
+     public_deps = [
+        "//base",
+        "//ipc",
+        "//mojo/edk/system",
+    ]
+}
+
+executable("ipc_child") {
+    sources = [
+        "ipc_child.cc",
+        "IPCMessage.h",
+    ]
+     public_deps = [
+        "//base",
+        "//ipc",
+        "//mojo/edk/system",
+    ]
+}
+
+executable("http_server") {
+    sources = [
+        "http_server.cc",
+    ]
+     public_deps = [
+        "//base",
+        "//net:net",
+    ]
+}
+
+test("main_unitest") {
+    sources = [
+        "build_time_unittest.cc"
+    ]
+    
+    deps = [
+    "//base",
+    "//base:i18n",
+    "//base/allocator:features",
+    "//base/test:native_library_test_utils",
+    "//base/test:test_support",
+    "//base/third_party/dynamic_annotations",
+    "//testing/gmock",
+    "//testing/gtest",
+    "//third_party/icu",
+    ":run_all_unittests"
+  ]
+}
+
+source_set("run_all_unittests") {
+    testonly = true
+
+    sources = [
+      "run_all_unittests.cc",
+    ]
+
+    deps = [
+      "//base",
+      "//base/test:test_support",
+    ]
+  }
