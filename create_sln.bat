@@ -1,0 +1,1 @@
+gn gen --ide=vs --filters=//example/exe/* out\example
